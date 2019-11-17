@@ -63,10 +63,10 @@ The source code have a region "Define global variables". This region contains th
 
 ````
 which represent the AzureAD Group to AzureAD role mapping. 
-***Important*** there are AzureAD roles and AzureAD role templates in AzureAD available. This script only support AzureAD roles.
-If you want to map an AzureAD group to a AzureAD role template, you have to convert the template to a role!
+***Important*** there are AzureAD roles and AzureAD role templates in AzureAD available. This script only supports AzureAD roles.
+If you want to map an AzureAD group to an AzureAD role template, you have to convert the template to a role!
 
-***Important*** Bevor you execute the script, please enable the debug modus (Script region: "Define global variables")
+***Important*** Before you execute the script, please enable the debug modus (Script region: "Define global variables")
 
 ````
  $debugscript = $true
