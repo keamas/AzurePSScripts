@@ -23,7 +23,7 @@
     $global:changelog = ""
     $debugscript = $true
 
-    $spconnection = Get-AutomationConnection -Name "DefineAzureADRoles"
+    $spconnection = Get-AutomationConnection -Name "AzureRunAsConnection"
 
     #Engel Tenant
     $AppCertThumprint = $spconnection.CertificateThumbprint
