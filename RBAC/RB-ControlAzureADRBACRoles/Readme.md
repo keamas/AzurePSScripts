@@ -1,12 +1,12 @@
 # Project Control Azure AD Role
-Customer request to control Azure AD Roles with On-Prem Active Directory Groups.
-This script is working with Azure AD Groups and Cloud only Users too.
+i got many customer requests to control Azure AD Roles with On-Prem Active Directory Groups.
+This script is working with Azure AD Groups synced from On-Prem and Cloud native too.
 
 ## Getting Started
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
 ### Prerequisites
-To implement that project in ylou live system you need the following components:
+To implement that project in your live system, the following prerequisits are required:
 
 * [Azure Automation Account](https://azure.microsoft.com/de-de/services/automation/) - 500 Runbook minutes per month are free
 * [Automation RunAs Account](https://docs.microsoft.com/en-us/azure/automation/manage-runas-account) - Create a RunAs account durring creation
@@ -19,13 +19,13 @@ All prerequisits are in place, so we can start with the implementation.
 It's important that you use the newest PowerShell Module versions.
 Implement the [Update Script](https://github.com/laglergruener/AzurePSScripts/tree/master/RBAC/RB-ControlAzureADRBACRoles/UpdateModule) 
 
-Import the AzureAD module into your Azure Automation Account
+Then import the AzureAD module into your Azure Automation Account
 
-#### Assign Global Admin permissions to the RunAs Account
+#### Assign Global Admin permissions to the RunAs account
 Durring the Azure Automation deployment you've created an Azure Automation RunAs Account.
 The required permissions for that account is the global admin role.
 
-To achive that use the following code:
+To achive that, use the following powershell code:
 
 ````
 Connect-AzureAD
@@ -35,16 +35,18 @@ Add-AzureADDirectoryRoleMember -ObjectId $group.ObjectId -RefObjectId $sp.Object
 
 ````
 
-In real production scenarios please define a seperate runas account!
+In real production scenarios, please define a seperate RunAs account!
 
 #### Create a Runbook
-First create a Runbook in Azure Automation (Type: Powershell Script)
-Add the Source code to the Runbook
+Next create a Runbook in Azure Automation (From type: Powershell Script)
+Add the published source code to the Runbook
 
 #### AD Group to Azure AD Role mapping
-Define the Active Directory Group to Azure AD Role mapping. ***Important*** The Active Diretory groups and their users should be synced to Azure AD!
+Create an Azure Active directory group (On-Prem or Cloud native) for your role mapping.
+Add the Active Directory Group to the Azure AD Role mapping. 
+***Important*** The Active Diretory groups and their users should be synced to Azure AD if youuse the On-Prem scenario!
 
-The source code have a region "Define global variables". This region includes the following source code:
+The source code have a region "Define global variables". This region contains the following source code:
 ````
 #Define Hashtable for Group to Role Mapping
     $grouprolemapping = @{
@@ -60,9 +62,9 @@ The source code have a region "Define global variables". This region includes th
                          }
 
 ````
-which represent the Active Directory Group to Azure AD Role mapping. 
-***Important*** there are Azure AD Roles and Azure AD Role Templates available in Azure AD. This Script only check the Azure AD Roles.
-If you want to map an On-Prem Group to a Azure AD Role template, you have to convert the template to a role!
+which represent the Azure AD Group to Azure AD Role mapping. 
+***Important*** there are Azure AD Roles and Azure AD Role templates in Azure AD available. This script only supports the Azure AD roles.
+If you want to map an AzureAD group to a Azure AD role template, you have to convert the template to a role!
 
 ***Important*** Bevor you execute the script, please enable the debug modus (Script region: "Define global variables")
 
