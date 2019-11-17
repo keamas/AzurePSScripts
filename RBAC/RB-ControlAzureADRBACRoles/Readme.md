@@ -1,4 +1,4 @@
-# Project Control Azure AD Role
+# Project Control Azure AD role
 i got many customer requests to control Azure AD Roles with On-Prem Active Directory Groups.
 This script is working with Azure AD Groups synced from On-Prem and Cloud native too.
 
