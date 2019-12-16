@@ -196,7 +196,7 @@ function Get-AzCachedAccessToken()
                                            -Tier Standard -NumberofWorkers 1 -WorkerSize Small
 
         $webapp = New-AzWebApp -Name $webappname -Location $location -ResourceGroupName $resourcegroup -AppServicePlan $appsvcplan.Name
-        $webappidentity = Set-AzWebApp -Name $webapp.Name -ResourceGroupName $webapp.ResourceGroup -AssignIdentity $true
+        $webappidentity = Set-AzWebApp -Name $webapp.Name -ResourceGroupName $webapp.ResourceGroup -AssignIdentity $true        
 
         Write-Host "Enable PSE for AppService"
         $resourceId = "$($webapp.Id)/config/virtualNetwork"
@@ -204,7 +204,7 @@ function Get-AzCachedAccessToken()
         $url = "https://management.azure.com$resourceId" + "?api-version=2018-02-01"
 
         $payload = @{ id=$resourceId; location=$location;  properties=@{subnetResourceId=$subnetid; swiftSupported="true"} } | ConvertTo-Json
-        $enableappsvcpseresponse = Invoke-RestMethod -Method Put -Uri $url -Headers @{ Authorization="Bearer $accesstoken"; "Content-Type"="application/json" } -Body $payload -Verbose -Debug
+        $enableappsvcpseresponse = Invoke-RestMethod -Method Put -Uri $url -Headers @{ Authorization="Bearer $accesstoken"; "Content-Type"="application/json" } -Body $payload -Verbose -Debug        
 
     }
     catch {
