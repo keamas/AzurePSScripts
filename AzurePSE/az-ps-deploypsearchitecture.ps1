@@ -206,6 +206,15 @@ function Get-AzCachedAccessToken()
         $payload = @{ id=$resourceId; location=$location;  properties=@{subnetResourceId=$subnetid; swiftSupported="true"} } | ConvertTo-Json
         $enableappsvcpseresponse = Invoke-RestMethod -Method Put -Uri $url -Headers @{ Authorization="Bearer $accesstoken"; "Content-Type"="application/json" } -Body $payload -Verbose -Debug        
 
+        #UPDATE new function! Auto deploy WebApp from my github repository
+        $gitrepo="https://github.com/ravishankar1730/Azure-PHP.git"  
+        $PropertiesObject = @{  
+            repoUrl = "$gitrepo";  
+            branch = "master";  
+            isManualIntegration = "true";  
+        }  
+
+
     }
     catch {
         Write-Error "Error in create AppService services section. Error message: $($_.Exception.Message)"       
