@@ -7,6 +7,7 @@
         
     .NOTES  
         Prerequisits:
+            Az
             AzTable
             Az.Storage
 
@@ -19,7 +20,7 @@
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
-$localFileDirectory = "C:\temp\WSContend\EssentialLevel1\BlobDemo"
+$localFileDirectory = "C:\Repos\AzurePSScripts\AzureHelpScripts\AzureStorage\BlobContent"
 
 #endregion
 #######################################################################################################################
@@ -113,12 +114,25 @@ function Login-Azure()
     foreach ($file in (Get-ChildItem -Path $localFileDirectory))
     {
         if($null -eq (Get-AzStorageContainer -Context $ctx | Where-Object { $_.Name -eq $ContainerName }))
-        {
+        {        
             New-AzStorageContainer -Context $ctx -Name $ContainerName
         }
         
         Set-AzStorageBlobContent -File $file.FullName -Container $ContainerName -Blob $file.Name -Context $ctx -Force
     }
+
+    #Get blobs from storage account container
+    Get-AzStorageBlob -Context $ctx -Container $ContainerName
+
+    #Delete all blobs from container
+    foreach ($blob in (Get-AzStorageBlob -Context $ctx -Container $ContainerName))
+    {
+        Remove-AzStorageBlob -Container $ContainerName -Force -Blob $blob.Name -Context $ctx
+    }    
+
+    
+    #Get blobs from storage account container
+    Get-AzStorageBlob -Context $ctx -Container $ContainerName
 
     #endregion
 
