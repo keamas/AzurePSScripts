@@ -195,6 +195,7 @@ function Get-AzCachedAccessToken()
         $appsvcplan = New-AzAppServicePlan -ResourceGroupName $resourcegroup -Location $location -Name $appsvcplanname `
                                            -Tier Standard -NumberofWorkers 1 -WorkerSize Small
 
+        
         $webapp = New-AzWebApp -Name $webappname -Location $location -ResourceGroupName $resourcegroup -AppServicePlan $appsvcplan.Name
         $webappidentity = Set-AzWebApp -Name $webapp.Name -ResourceGroupName $webapp.ResourceGroup -AssignIdentity $true        
 
