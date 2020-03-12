@@ -16,13 +16,13 @@ param (
     $UserUPN,
     [Parameter()]
     [bool]
-    $ExporttoJSON = $true,
+    $ExporttoJSON,
     [Parameter()]
     [bool]
-    $ExporttoHTML = $true,
+    $ExporttoHTML,
     [Parameter()]
     [bool]
-    $ExporttoCSV = $true
+    $ExporttoCSV
 )
 
 #######################################################################################################################
@@ -113,7 +113,7 @@ function LoginAzureAD()
     }
 
 
-        #region Export to HTML
+    if ($ExporttoHTML){
         $ownerreport = ""
 
         foreach ($group in $ownerof)
@@ -149,15 +149,16 @@ function LoginAzureAD()
                     </html>"
 
         $report > "C:\temp\GroupOwnerReport.html"
+    }
 
-        #endregion
-
-        #export to JSON
+    if ($ExporttoJSON) {
         $ownerof | ConvertTo-Json > "C:\temp\GroupOwnerReport.json"   
-        #endregion
+    }
 
-        #export to CSV
+    if($ExporttoCSV)
+    {
         $ownerof | export-csv -path "C:\temp\GroupOwnerReport.csv" -notypeinformation
+    }
      
 #endregion
 #######################################################################################################################
