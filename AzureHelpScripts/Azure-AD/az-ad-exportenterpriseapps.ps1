@@ -47,8 +47,8 @@ function LoginAzureAD()
     )
     try 
     {
-        if(-not (Get-Module Az.Accounts)) {
-            Import-Module Az.Accounts
+        if(-not (Get-Module AzureAD)) {
+            Import-Module AzureAD
         }
     
         Connect-AzureAD -TenantId $Tenant        
@@ -228,7 +228,44 @@ function LoginAzureAD()
 
     if($ExporttoCSV)
     {
+        $csvlist =@()
 
+        foreach ($appobj in $apps)
+        {
+            $members = "("
+            foreach ($member in $appobj.Members)
+            {
+                $members += "$($member),"
+            } 
+            $members += ")"
+
+            $appperm = "("
+            foreach ($appperm in $appobj.AppPermission)
+            {
+                $appperm += "$($appperm),"
+            }  
+            $appperm += ")"
+
+            $deleperm = "("
+            foreach ($delperm in $appobj.DelPermissions)
+            {
+                $deleperm += "$($delperm),"
+            }   
+            $deleperm += ")"  
+
+            $newrow = New-Object PSObject -Property @{
+                        Name = $appobj.ServicePrincipalName
+                        ID = $appobj.ServicePrincipalID
+                        Enabled = $appobj.Enabled
+                        UserAssigmentRequired = $appobj.UserAssigmentRequired
+                        Members = $members
+                        AppPerm = $appperm
+                        DelPerm = $deleperm
+                    }
+
+            $csvlist += $newrow
+        }
+        $csvlist | export-csv -path "$($PSScriptRoot)\temp\AppReport.csv" -notypeinformation
     }
      
 #endregion
