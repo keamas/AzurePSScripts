@@ -13,9 +13,6 @@
 param (
     [Parameter(Mandatory=$true)]
     [string]
-    $TenantID,
-    [Parameter(Mandatory=$true)]
-    [string]
     $ExporttoJSON,
     [Parameter(Mandatory=$true)]
     [string]
@@ -40,18 +37,13 @@ $ErrorActionPreference = "Stop"
 #login to azure and get access token
 function LoginAzureAD()
 {
-    param (
-        [Parameter()]
-        [string]
-        $Tenant
-    )
     try 
     {
         if(-not (Get-Module AzureAD)) {
             Import-Module AzureAD
         }
     
-        Connect-AzureAD -TenantId $Tenant        
+        Connect-AzureAD       
     }
     catch {
         Write-Error "Error in function Login-Azure. Error message: $($_.Exception.Message)"
@@ -66,7 +58,7 @@ function LoginAzureAD()
 #region Script start
 
     Write-Host "Connect to Azure AD"
-    LoginAzureAD -Tenant $TenantID
+    LoginAzureAD
 
     $sps = Get-AzureADServicePrincipal -All $true
     $delegatedgrantperm = Get-AzureADOAuth2PermissionGrant
@@ -199,11 +191,11 @@ function LoginAzureAD()
                                 TD{border: 1px solid black; padding: 5px; }
                         </style>
                     <head>
-                        <title>ACP App Report</title>                        
+                        <title>Cloud Enterprise App Report</title>                        
                     </head>
                     <body>
                         
-                            <h2>ACP App Report</h2>
+                            <h2>Cloud Enterprise App Report</h2>
                                 <table>
                                     <tr>
                                         <th>Name</th>
@@ -219,11 +211,11 @@ function LoginAzureAD()
                     </body>
                     </html>"
 
-        $report > "$($PSScriptRoot)\temp\AppReport.html"
+        $report > "C:\temp\AppReport.html"
     }
 
     if ($ExporttoJSON) {
-        $apps | ConvertTo-Json > "$($PSScriptRoot)\AppReport.json"
+        $apps | ConvertTo-Json > "C:\temp\AppReport.json"
     }
 
     if($ExporttoCSV)
@@ -265,7 +257,7 @@ function LoginAzureAD()
 
             $csvlist += $newrow
         }
-        $csvlist | export-csv -path "$($PSScriptRoot)\temp\AppReport.csv" -notypeinformation
+        $csvlist | export-csv -path "C:\temp\AppReport.csv" -notypeinformation
     }
      
 #endregion

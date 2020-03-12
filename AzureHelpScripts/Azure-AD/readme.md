@@ -10,7 +10,6 @@ That scipt export all Azure Enterprise applications with the following settings:
 ## Parameters for script: az-ad-exportenterpriseapps.ps1
 I've add the following required parameters to the script:
 
-    * TenantID > Please insert the Azure AD TenantID (Sample: c1021507-78e3-2044-b3d-476ae7b152f8)
     * ExporttoJSON > It's possible to export the result into a JSON file. (Stored C:\temp\AppReport.json)
     * ExporttoHTML > It's possible to export the result into a HTML file. (Stored C:\temp\AppReport.html)
     * ExporttoCSV > It's possible to export the result into a CSV file. (Stored C:\temp\AppReport.csv)
@@ -55,12 +54,27 @@ The following modules are required:
     * AzureAD
 
 ---------------------------------------------------------------------------------------------------------------
+# Script: az-ad-user-findownergroups.ps1
+That scipt export all Azure Enterprise applications with the following settings:
+    * Username
+    * Groupname
 
-# Script: xxx.ps1
+## Parameters for script: az-ad-user-findownergroups.ps1
+I've add the following required parameters to the script:
 
-## Parameters for script: xxx.ps1
+    * ExporttoJSON > It's possible to export the result into a JSON file. (Stored C:\temp\AppReport.json)
+    * ExporttoHTML > It's possible to export the result into a HTML file. (Stored C:\temp\AppReport.html)
+    * ExporttoCSV > It's possible to export the result into a CSV file. (Stored C:\temp\AppReport.csv)
 
-### Prerequisites for script: xxx.ps1
+Sample: 
+    az-ad-user-findownergroups.ps1 -ExporttoJSON true
+                                   -ExporttoHTML true
+                                   -ExporttoCSV true
+
+### Prerequisites for script: az-ad-user-findownergroups.ps1
+The following modules are required:
+    
+    * AzureAD
 
 
 ---------------------------------------------------------------------------------------------------------------

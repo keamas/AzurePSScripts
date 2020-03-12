@@ -156,7 +156,7 @@ function LoginAzureAD()
                     </head>
                     <body>
                         
-                            <h2>Cloud User Report</h2>
+                            <h2>Cloud only User Report</h2>
                                 <table>
                                     <tr>
                                         <th>Name</th>
@@ -172,11 +172,11 @@ function LoginAzureAD()
                     </body>
                     </html>"
 
-        $report > "$($PSScriptRoot)\temp\CloudUserReport.html"
+        $report > "c:\temp\CloudUserReport.html"
     }
 
     if ($ExporttoJSON) {
-        $users | ConvertTo-Json > "$($PSScriptRoot)\temp\CloudUserReport.json"
+        $users | ConvertTo-Json > "C:\temp\CloudUserReport.json"
     }
 
     if($ExporttoCSV)
@@ -218,7 +218,7 @@ function LoginAzureAD()
 
             $csvlist += $newrow
         }
-        $csvlist | export-csv -path "$($PSScriptRoot)\temp\CloudUserReport.csv" -notypeinformation
+        $csvlist | export-csv -path "C:\temp\CloudUserReport.csv" -notypeinformation
     }
      
 #endregion
