@@ -1,13 +1,12 @@
 <#
     SYNOPSIS
-        This script is used to demonstrate an azure PSE Architecture
+        This script is used to demonstrate an azure PE Architecture
     .DESCRIPTION
-        This script is used to demonstrate an azure PSE Architecture
+        This script is used to demonstrate an azure PE Architecture
     .EXAMPLE
         
     .NOTES  
-        Please install the latest Az Modules!
-        Please also install AzureRM.Profile module
+        
 #>
 
 #######################################################################################################################
@@ -15,7 +14,6 @@
 
 $accesstoken = ""
 
-#$resourcegroup = "rg-psedemo"
 $resourcegroup = "Global-Azure-BootCamp-2020"
 $location = "West Europe"
 $vnetname = "vnetpedemo"
