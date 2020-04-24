@@ -10,16 +10,21 @@ using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Extensions.Configuration.AzureKeyVault;
 using Microsoft.Extensions.Logging;
 using WebApplication2.Models;
+using Microsoft.Extensions.Configuration;
+using System.Net;
 
 namespace WebApplication2.Controllers
 {
     public class HomeController : Controller
     {
+        readonly IConfiguration _configuration;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        //public HomeController(ILogger<HomeController> logger)
+        public HomeController(IConfiguration configuration)
         {
-            _logger = logger;
+            _configuration = configuration;
+            //_logger = logger;
         }
         
         public async System.Threading.Tasks.Task<ActionResult> Index()
@@ -36,7 +41,14 @@ namespace WebApplication2.Controllers
                 var keyVaultClient = new KeyVaultClient(
                     new KeyVaultClient.AuthenticationCallback(azureServiceTokenProvider.KeyVaultTokenCallback));
 
-                var secret = await keyVaultClient.GetSecretAsync("https://laglerh-testkeyvault.vault.azure.net/secrets/dbconnection")
+                string[] stringSeparators = new string[] { "/" };
+                string[] kvserver = (_configuration["KeyVault"]).ToString().Split(stringSeparators, StringSplitOptions.RemoveEmptyEntries);
+
+                ViewBag.KeyVaultName = kvserver[1];
+                ViewBag.KeyVaultIP = Dns.GetHostEntry(kvserver[1]).AddressList[0];
+
+                //KeyVault for PSE
+                var secret = await keyVaultClient.GetSecretAsync(_configuration["KeyVault"])
                     .ConfigureAwait(false);                
 
                 SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
@@ -48,14 +60,30 @@ namespace WebApplication2.Controllers
                 {
                     try
                     {
+                        ViewBag.SQLServerName = connection.DataSource;
+                        ViewBag.SQLServerIP = Dns.GetHostEntry(connection.DataSource).AddressList[0];
                         connection.Open();
                         ViewBag.SQLConnectionState = "Success";
 
-                        string sql = "select count(*) from table_name";
+                        string sql = "select count(*) from " + _configuration["TableName"];
 
                         using (SqlCommand command = new SqlCommand(sql, connection))
                         {
                             ViewBag.SQLEntriesreturn = command.ExecuteScalar();
+                        }
+
+                        string sqlquery = "SELECT TOP 1 Name,Details FROM " + _configuration["TableName"];                        
+
+                        using (SqlCommand command = new SqlCommand(sqlquery, connection))
+                        {
+                            SqlDataReader reader = command.ExecuteReader();
+
+                            while (reader.Read())
+                            {
+                                ViewBag.SQLFirstEntry = reader["Details"].ToString();
+                            }
+
+                            reader.Close();
                         }
                     }
                     catch (Exception exp)

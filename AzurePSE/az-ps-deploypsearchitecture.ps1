@@ -16,18 +16,18 @@
 $accesstoken = ""
 
 #$resourcegroup = "rg-psedemo"
-$resourcegroup = "ACP-Demo-PSE-Architecture"
+$resourcegroup = "Global-Azure-BootCamp-2020-IaaS-PaaS"
 $location = "West Europe"
 $vnetname = "vnetpsedemo01"
 
-$sqlservername = "sqldemopse"
-$sqldatabasename = "demopsedb"
+$sqlservername = "sqldemopse2"
+$sqldatabasename = "demopsedb2"
 
-$appsvcplanname = "demopseappsvcp"
-$webappname = "demowebapppse"
+$appsvcplanname = "demopseappsvcp2"
+$webappname = "demowebapppse2"
 
-$keyvaultname = "demopsekeyvault"
-$keyvaultsecretname = "dbconnectdemopse"
+$keyvaultname = "demopsekeyvault2"
+$keyvaultsecretname = "dbconnectdemopse2"
 
 $ErrorActionPreference = 'Stop'
 
@@ -82,6 +82,7 @@ function Get-AzCachedAccessToken()
 
 #######################################################################################################################
 #region Script start
+    Clear-AzContext -Force
 
     Write-Host "#######################################################################"
     $sqlservercredential = Get-Credential -Message "Please enter sql server credential"
@@ -205,17 +206,7 @@ function Get-AzCachedAccessToken()
         $url = "https://management.azure.com$resourceId" + "?api-version=2018-02-01"
 
         $payload = @{ id=$resourceId; location=$location;  properties=@{subnetResourceId=$subnetid; swiftSupported="true"} } | ConvertTo-Json
-        $enableappsvcpseresponse = Invoke-RestMethod -Method Put -Uri $url -Headers @{ Authorization="Bearer $accesstoken"; "Content-Type"="application/json" } -Body $payload -Verbose -Debug        
-
-        #UPDATE new function! Auto deploy WebApp from my github repository
-        $gitrepo="https://github.com/ravishankar1730/Azure-PHP.git"  
-        $PropertiesObject = @{  
-            repoUrl = "$gitrepo";  
-            branch = "master";  
-            isManualIntegration = "true";  
-        }  
-
-
+        $enableappsvcpseresponse = Invoke-RestMethod -Method Put -Uri $url -Headers @{ Authorization="Bearer $accesstoken"; "Content-Type"="application/json" } -Body $payload -Verbose -Debug         
     }
     catch {
         Write-Error "Error in create AppService services section. Error message: $($_.Exception.Message)"       
